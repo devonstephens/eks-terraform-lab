@@ -26,4 +26,10 @@ When you are finished messing around, destroy everything and stop costs by runni
 ```
 terraform destroy
 ```
-The destroy should only take about 5 minutes
+The destroy should only take about 5 minutes  
+  
+Install argo-cd with helm https://www.arthurkoziel.com/setting-up-argocd-with-helm/
+```
+helm install argo-cd charts/argo-cd/
+```
+Ignore the warnings

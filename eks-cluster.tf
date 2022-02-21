@@ -42,12 +42,13 @@ module "eks" {
       create_launch_template = false
       launch_template_name = ""
     }
-#   compute = {
+#   some_node_group = {
 #     instance_types = ["t2.small","t2.medium"]
 #   }
-    
+# Can enable ARM Graviton nodes with this. Can also use bottlerocket instead of AL2    
 #    graviton_bottlerocket = {
 #      ami_type = "BOTTLEROCKET_ARM_64"
+#      platform = "bottlerocket"
 #      instance_types = ["t4g.small", "t4g.medium"]
 #    }
   }
