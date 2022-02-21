@@ -3,6 +3,10 @@ module "eks" {
   version         = "18.7.2"
   cluster_name    = local.cluster_name
   cluster_version = "1.21"
+  #allow cluster API access both public and private. This allows to run kubectl without a vpn. Not good for production
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
+
   cluster_addons = {
     coredns = {
       resolve_conflicts = "OVERWRITE"
@@ -10,6 +14,7 @@ module "eks" {
     kube-proxy = {}
     vpc-cni = {
       resolve_conflicts = "OVERWRITE"
+      service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
     }
   }
   
@@ -28,6 +33,8 @@ module "eks" {
     ami_type               = "AL2_x86_64"
     disk_size              = 50
     instance_types         = ["t3.small","t3.medium"]
+    #Addtional security group that allows us to connect to the nodes
+    vpc_security_group_ids = [aws_security_group.all_worker_mgmt.id]
   }
 
   eks_managed_node_groups = {
@@ -35,9 +42,14 @@ module "eks" {
       create_launch_template = false
       launch_template_name = ""
     }
-    compute = {
-      instance_types = ["t3.small","t3.medium"]
-    }
+#   compute = {
+#     instance_types = ["t2.small","t2.medium"]
+#   }
+    
+#    graviton_bottlerocket = {
+#      ami_type = "BOTTLEROCKET_ARM_64"
+#      instance_types = ["t4g.small", "t4g.medium"]
+#    }
   }
 
   tags = local.tags
