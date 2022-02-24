@@ -42,6 +42,9 @@ module "eks" {
     default = {
       create_launch_template = false
       launch_template_name = ""
+      tags = {
+        "karpenter.sh/discovery" = local.cluster_name
+      }
     }
 #   some_node_group = {
 #     instance_types = ["t2.small","t2.medium"]
