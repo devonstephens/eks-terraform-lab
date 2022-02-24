@@ -29,7 +29,8 @@ module "eks" {
     # We are using the IRSA created below for permissions
     # This is a better practice as well so that the nodes do not have the permission,
     # only the VPC CNI addon will have the permission
-    iam_role_attach_cni_policy = false
+##### I couldn't get this to work so set to true to grant node permissions needed to join cluster
+    iam_role_attach_cni_policy = true
     ami_type               = "AL2_x86_64"
     disk_size              = 50
     instance_types         = ["t3.small","t3.medium"]
@@ -59,7 +60,7 @@ module "eks" {
 module "vpc_cni_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name             = "vpc_cni"
+  role_name_prefix      = "vpc_cni"
   attach_vpc_cni_policy = true
   vpc_cni_enable_ipv4   = true
 
@@ -81,7 +82,7 @@ module "karpenter_irsa" {
 
   karpenter_controller_cluster_ids        = [module.eks.cluster_id]
   karpenter_controller_node_iam_role_arns = [
-    module.eks.eks_managed_node_groups["default"].iam_role_arn
+  module.eks.eks_managed_node_groups["default"].iam_role_arn
   ]
 
   oidc_providers = {
