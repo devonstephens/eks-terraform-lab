@@ -22,6 +22,8 @@ After running terraform apply, configure your kubeconfig with
 ```
 aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
 ```
+You can now use kubectl commands to try stuff out.  
+This costs around $2 for 8 hours use assuming you don't add more nodes or scale out.
 When you are finished messing around, destroy everything and stop costs by running
 ```
 terraform destroy
